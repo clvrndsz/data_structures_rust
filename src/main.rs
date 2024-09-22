@@ -52,8 +52,12 @@ impl DynamicArray {
         if index >= self.len {
             return Err("index is out of bounds")
         }
-        self.arr = self.arr[..index];
-        Ok(())
+        self.arr = {
+        let left = self.arr[..index];
+        let right  = self.arr.[index..];
+        self.arr
+        };
+            Ok(())
     }
 
     fn remove(&mut self, value: i32) {
