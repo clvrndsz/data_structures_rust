@@ -50,7 +50,7 @@ impl DynamicArray {
 
     fn remove_at(&mut self, index: usize)-> Result<(),&str>  {
         if index >= self.len {
-            return Err("index is out of bounds")
+            return Err("heyooooo index is out of bounds")
         }
         self.arr = self.arr[..index];
         Ok(())
