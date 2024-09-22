@@ -47,17 +47,13 @@ impl DynamicArray {
         self.len = 1;
         self.capacity = 1;
     }
-
+// NOTE: rwewrite in vec<T>, minimize abstractions if needed.
     fn remove_at(&mut self, index: usize)-> Result<(),&str>  {
         if index >= self.len {
             return Err("index is out of bounds")
         }
-        self.arr = {
-        let left = self.arr[..index];
-        let right  = self.arr.[index..];
-        self.arr
-        };
-            Ok(())
+        self.arr = [self.arr[..index], self.arr[index..]].concat();
+        Ok(())
     }
 
     fn remove(&mut self, value: i32) {
