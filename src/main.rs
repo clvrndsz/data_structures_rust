@@ -9,6 +9,12 @@ pub struct DynamicArray {
 }
 
 impl DynamicArray {
+    
+    fn new(&mut self) {
+        self.arr = [0, 0];
+        self.len = 2;
+        self.capacity = 4;
+    }
 
     fn size(&self) -> usize {
         self.len
@@ -18,8 +24,11 @@ impl DynamicArray {
         self.len == 0
     }
 
-    fn get(&self, index: usize) -> i32 {
-        self.arr[index]
+    fn get(&self, index: usize) -> Result<i32, &str> {
+        if index >= self.len {
+            return Err("index is out of bounds")
+        }
+        Ok(self.arr[index])
     }
 
     fn set(&mut self, index: usize, value: i32) -> Result<(), &str> {
@@ -32,14 +41,12 @@ impl DynamicArray {
 
     fn append(&mut self, value :i32)-> () {
         if self.len + 1 >= self.capacity {
-            if self.capacity == 0 {
-                self.capacity = 1;
-            } else {
-                self.capacity *= 2;
-            }
+            self.capacity *= 2;
         }
-        self.arr[self.len] = value;
+        let new_arr = [i32; self.arr.len()+ 1];
+        self.arr = [i32; self.arr.len() + 1];
         self.len += 1;
+        self.arr[len] = value;
     }
 
     fn clear(&mut self)-> () {
@@ -47,7 +54,7 @@ impl DynamicArray {
         self.len = 1;
         self.capacity = 1;
     }
-// NOTE: rwewrite in vec<T>, minimize abstractions if needed.
+
     fn remove_at(&mut self, index: usize)-> Result<(),&str>  {
         if index >= self.len {
             return Err("index is out of bounds")
