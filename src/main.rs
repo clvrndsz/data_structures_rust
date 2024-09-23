@@ -2,52 +2,50 @@ fn main() {
     println!("Hello, world!");
 }
 
-pub struct DynamicArray {
-    pub arr : [i32; 2],     // TODO: make generic
-    pub len: usize,
+pub struct DynamicArray<const N: usize> {
+    pub data: [i32; N],
     pub capacity: usize,    // TODO: add default
 }
 
-impl DynamicArray {
-    
-    fn new(&mut self) {
-        self.arr = [0, 0];
-        self.len = 2;
-        self.capacity = 4;
-    }
+
+impl  <const N: usize> DynamicArray <N>{
 
     fn size(&self) -> usize {
-        self.len
+        self.data.len()
     }
 
     fn is_empty(&self) -> bool {
-        self.len == 0
+        self.data.len() == 0
     }
 
     fn get(&self, index: usize) -> Result<i32, &str> {
-        if index >= self.len {
+        if index >= self.data.len() {
             return Err("index is out of bounds")
         }
-        Ok(self.arr[index])
+        Ok(self.data[index])
     }
 
     fn set(&mut self, index: usize, value: i32) -> Result<(), &str> {
-        if index > self.len {
+        if index > self.data.len() {
             return Err("index is out of bounds")
         }
-        self.arr[index] = value;
+        self.data[index] = value;
         Ok(())
     }
 
     fn append(&mut self, value :i32)-> () {
-        if self.len + 1 >= self.capacity {
+        if self.data.len() + 1 >= self.capacity {
             self.capacity *= 2;
         }
-        let new_arr = [i32; self.arr.len()+ 1];
-        self.arr = [i32; self.arr.len() + 1];
-        self.len += 1;
-        self.arr[len] = value;
+        let new_data = [self.data, [value]].join();
     }
+
+    // NOTE: giving up on using arrays as they suck
+    // with the whole stack assigned fixed length bs. 
+    // i would have had to clone each item in an array
+    // individually as the borrow checker would not
+    // allow me to concat two diff lengths of arrays.
+    
 
     fn clear(&mut self)-> () {
         self.arr = [0;2];
