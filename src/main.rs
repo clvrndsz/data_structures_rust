@@ -2,13 +2,20 @@ fn main() {
     println!("Hello, world!");
 }
 
-pub struct DynamicArray<const N: usize> {
-    pub data: [i32; N],
+pub struct DynamicArray {
+    pub data: vec::new(),
     pub capacity: usize,    // TODO: add default
 }
 
 
-impl  <const N: usize> DynamicArray <N>{
+    // NOTE: giving up on using arrays as they suck
+    // with the whole stack assigned fixed length bs. 
+    // i would have had to clone each item in an array
+    // individually as the borrow checker would not
+    // allow me to concat two diff lengths of arrays.
+    
+// WARN: stop effort here, vecs have everything unfortunately.
+impl DynamicArray{
 
     fn size(&self) -> usize {
         self.data.len()
@@ -39,13 +46,6 @@ impl  <const N: usize> DynamicArray <N>{
         }
         let new_data = [self.data, [value]].join();
     }
-
-    // NOTE: giving up on using arrays as they suck
-    // with the whole stack assigned fixed length bs. 
-    // i would have had to clone each item in an array
-    // individually as the borrow checker would not
-    // allow me to concat two diff lengths of arrays.
-    
 
     fn clear(&mut self)-> () {
         self.arr = [0;2];
