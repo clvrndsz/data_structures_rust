@@ -1,21 +1,29 @@
+#![allow(dead_code)]
+
+
 fn main() {
     println!("Hello, world!");
 }
 
-pub struct DynamicArray {
-    pub data: vec::new(),
-    pub capacity: usize,    // TODO: add default
+pub struct DynamicArray<const N: usize> {
+    pub data: [i32;N],      // TODO: change to generic
+    pub capacity: usize,
 }
 
+fn new_array() -> DynamicArray<2>  {
+    DynamicArray {
+        data: [0;2],
+        capacity: 4,  // idk man
+    }
+}
 
     // NOTE: giving up on using arrays as they suck
     // with the whole stack assigned fixed length bs. 
     // i would have had to clone each item in an array
     // individually as the borrow checker would not
     // allow me to concat two diff lengths of arrays.
-    
-// WARN: stop effort here, vecs have everything unfortunately.
-impl DynamicArray{
+
+impl <const N: usize> DynamicArray<N>{
 
     fn size(&self) -> usize {
         self.data.len()
@@ -23,6 +31,17 @@ impl DynamicArray{
 
     fn is_empty(&self) -> bool {
         self.data.len() == 0
+    }
+
+    fn index_of(&self, value: i32) -> Option<usize> {
+        let mut index: usize = 0;
+        while index <= self.data.len() {
+            if self.data[index] == value {
+                return Some(index);
+            }
+            index +=1;
+        }
+        None
     }
 
     fn get(&self, index: usize) -> Result<i32, &str> {
@@ -40,39 +59,48 @@ impl DynamicArray{
         Ok(())
     }
 
-    fn append(&mut self, value :i32)-> () {
-        if self.data.len() + 1 >= self.capacity {
-            self.capacity *= 2;
+    fn contains(&self, value: i32) -> bool {
+        match self.index_of(value) {
+            Some(_) => return true,
+            None => false,
         }
-        let new_data = [self.data, [value]].join();
     }
+}
+// NOTE: The following methods need to be outside of the impl
+// because the size of the array is changed, so I must clone. 
 
-    fn clear(&mut self)-> () {
-        self.arr = [0;2];
-        self.len = 1;
-        self.capacity = 1;
-    }
-
-    fn remove_at(&mut self, index: usize)-> Result<(),&str>  {
-        if index >= self.len {
-            return Err("index is out of bounds")
-        }
-        self.arr = [self.arr[..index], self.arr[index..]].concat();
-        Ok(())
-    }
-
-    fn remove(&mut self, value: i32) {
-        
-
-    }
-
-fn indexOf {
-
+fn clear_array<const N: usize>(_input_array: DynamicArray<N>)-> DynamicArray<2> {
+    //Notice how you dont have to free the memory of the
+    //input array because once it goes out of scope, it evaporates :)
+    new_array()
 }
 
-fn contains -> bool  {
+fn append<const N: usize, const T: usize> (
+    input_array: DynamicArray<N>, value: i32
+)-> DynamicArray<{T}> {
+    let t_: usize = input_array.data.len() + 1;
+    let output_array: DynamicArray<{t_}>
+        //let output_array: DynamicArray<T>;
+   // if self.data.len() + 1 >= self.capacity {
+     //       self.capacity *= 2;
+      //  }
+      //  let new_data = [self.data, [value]].join();
     
 }
+//
+//
+//    fn remove_at(&mut self, index: usize)-> Result<(),&str>  {
+//        if index >= self.data.len() {
+//            return Err("index is out of bounds")
+//        }
+//        self.data = [self.data[..index], self.data[index..]].concat();
+//        Ok(())
+//    }
+//
+//    fn remove(&mut self, value: i32) {
+//
+//    }
+//
 
 //impl iterator 
 //// provides the ability to traverse the array without 
@@ -86,7 +114,3 @@ fn contains -> bool  {
 //
 //}
 //
-
-
-
-}
